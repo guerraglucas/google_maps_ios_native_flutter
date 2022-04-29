@@ -1,9 +1,9 @@
 PODS:
   - Flutter (1.0.0)
-  - GoogleMaps (6.1.1):
-    - GoogleMaps/Maps (= 6.1.1)
-  - GoogleMaps/Base (6.1.1)
-  - GoogleMaps/Maps (6.1.1):
+  - GoogleMaps (6.2.0):
+    - GoogleMaps/Maps (= 6.2.0)
+  - GoogleMaps/Base (6.2.0)
+  - GoogleMaps/Maps (6.2.0):
     - GoogleMaps/Base
   - platform_view (0.0.1):
     - Flutter
@@ -25,7 +25,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  GoogleMaps: 94e6e0851beece6678af9f508f4918b7a7c61722
+  GoogleMaps: c1b9de14cecc940b2d334dd4e6dfa116bff4a40e
   platform_view: 07ac0b2eb5d80f79ac92376d0d01d6b8e2a397dc
 
 PODFILE CHECKSUM: 4e8f8b2be68aeea4c0d5beb6ff1e79fface1d048
