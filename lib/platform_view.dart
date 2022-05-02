@@ -12,7 +12,15 @@ class PlatformView extends StatelessWidget {
     // This is used in the platform side to register the view
     const String viewType = '<platform-view-type>';
     // Pass parameters to the platform side
-    final Map<String, dynamic> creationParams = <String, dynamic>{};
+    const listLatLong = [
+      [37.36, -122.0],
+      [37.45, -122.0],
+      [37.45, -122.2],
+      [37.40, -122.2],
+    ];
+    final Map<String, dynamic> creationParams = <String, dynamic>{
+      'latLong': listLatLong
+    };
 
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,4 +36,9 @@ class PlatformView extends StatelessWidget {
         return const SizedBox();
     }
   }
+
+  //   rect.add(CLLocationCoordinate2D(latitude: 37.36, longitude: -122.0))
+  // rect.add(CLLocationCoordinate2D(latitude: 37.45, longitude: -122.0))
+  // rect.add(CLLocationCoordinate2D(latitude: 37.45, longitude: -122.2))
+  // rect.add(CLLocationCoordinate2D(latitude: 37.36, longitude: -122.2))
 }

@@ -16,8 +16,12 @@ class PlatformViewPluginViewFactory: NSObject, FlutterPlatformViewFactory {
         return PlatformViewPluginView(
             frame: frame,
             viewId: viewId,
-            args: args,
+            args: args as? [String : Any] ?? [:],
             messenger: messenger
         )
+    }
+
+    func createArgsCodec() -> FlutterMessageCodec & NSObjectProtocol {
+        return FlutterStandardMessageCodec.sharedInstance()
     }
 }
