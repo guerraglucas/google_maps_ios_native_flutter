@@ -16,6 +16,7 @@ A new flutter plugin project.
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
   s.dependency 'GoogleMaps'
+  s.dependency 'Google-Maps-iOS-Utils'
   s.static_framework = true #important
   s.platform = :ios, '12.0'
 

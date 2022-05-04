@@ -1,6 +1,7 @@
 import Flutter
 import UIKit
 import GoogleMaps
+import GoogleMapsUtils
 
 class PlatformViewPluginView: NSObject, FlutterPlatformView {
     // private var _view: UIView
@@ -32,33 +33,18 @@ class PlatformViewPluginView: NSObject, FlutterPlatformView {
         return getOtSetupMapsView()
     }
 
-    func createNativeView(view _view: UIView) {
-        let camera = GMSCameraPosition.camera(withLatitude: -33.86, longitude: 151.20, zoom: 12)
-        let mapView = GMSMapView.map(withFrame: _view.frame, camera: camera)
-        mapView.mapType = .satellite
-        let marker = GMSMarker()
-        marker.position = CLLocationCoordinate2D(latitude: -33.86, longitude: 151.20)
-        marker.title = "Sydney"
-        marker.snippet = "Australia"
-        _view.backgroundColor = UIColor.blue
-        let nativeLabel = UILabel()
-        nativeLabel.text = "Native text from iOS"
-        nativeLabel.textColor = UIColor.white
-        nativeLabel.textAlignment = .center
-        nativeLabel.frame = CGRect(x: 0, y: 0, width: 180, height: 48)
-        _view.addSubview(mapView)
-    }
-
     func getOtSetupMapsView() -> GMSMapView {
         if let mapView = mapView {
             return mapView
         }
-        let camera = GMSCameraPosition.camera(withLatitude: 37.36, longitude: -122.2, zoom: 29)
+        let camera = GMSCameraPosition.camera(withLatitude: -37.1886, longitude: 145.708, zoom: 10)
         let mapView = GMSMapView.map(withFrame: frame, camera: camera)
         self.mapView = mapView
         mapView.mapType = .satellite
         let polygon = createPolygons()
         polygon.map = mapView
+        let heatmap = addHeatmap()
+        heatmap.map = mapView
 
         // mapView.rootViewController = UIApplication.shared.keyWindow?.rootViewController
         // self.mapView.delegate = self
@@ -79,10 +65,6 @@ class PlatformViewPluginView: NSObject, FlutterPlatformView {
         for latLong in listLatLong {
             rect.add(CLLocationCoordinate2D(latitude: latLong[0], longitude: latLong[1]))
         }
-        // rect.add(CLLocationCoordinate2D(latitude: 37.36, longitude: -122.0))
-        // rect.add(CLLocationCoordinate2D(latitude: 37.45, longitude: -122.0))
-        // rect.add(CLLocationCoordinate2D(latitude: 37.45, longitude: -122.2))
-        // rect.add(CLLocationCoordinate2D(latitude: 37.36, longitude: -122.2))
 
         //create the polygon, and assign it to the map
 
@@ -92,4 +74,33 @@ class PlatformViewPluginView: NSObject, FlutterPlatformView {
         polygon.strokeWidth = 2
         return polygon
     }
+
+    func addHeatmap() -> GMUHeatmapTileLayer {
+
+    var heatmapLayer = GMUHeatmapTileLayer()
+
+    let object: [[String : Double]] = [
+        ["lat" : -37.1886, "lng" : 145.708 ] ,
+        ["lat" : -37.8361, "lng" : 144.845 ],
+        ["lat" : -38.4034, "lng" : 144.192 ],
+        ["lat" : -38.7597, "lng" : 143.67 ] ,
+        ["lat" : -36.9672, "lng" : 141.083 ]
+    ]
+
+    var list = [GMUWeightedLatLng]()
+    for item in object {
+      let lat = item["lat"] as! CLLocationDegrees
+      let lng = item["lng"] as! CLLocationDegrees
+      let coords = GMUWeightedLatLng(
+        coordinate: CLLocationCoordinate2DMake(lat, lng),
+        intensity: 1.0
+      )
+      list.append(coords)
+    }
+
+    // Add the latlngs to the heatmap layer.
+    heatmapLayer.weightedData = list
+
+    return heatmapLayer
+}
 }
