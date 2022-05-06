@@ -5,21 +5,23 @@ import 'package:flutter/services.dart';
 class PlatformView extends StatelessWidget {
   // static const MethodChannel _channel = MethodChannel('platform_view');
 
-  const PlatformView({Key? key}) : super(key: key);
+  const PlatformView({Key? key, this.polygon, this.heatmap}) : super(key: key);
+
+  ///receives a list of [lat, lng] to draw polygons on the map
+  final List<List<double>>? polygon;
+
+  ///receives a list of [lat, lng] to draw heatmap points on the map
+  final List<Map<String, double>>? heatmap;
 
   @override
   Widget build(BuildContext context) {
     // This is used in the platform side to register the view
     const String viewType = '<platform-view-type>';
     // Pass parameters to the platform side
-    const listLatLong = [
-      [37.36, -122.0],
-      [37.45, -122.0],
-      [37.45, -122.2],
-      [37.40, -122.2],
-    ];
+
     final Map<String, dynamic> creationParams = <String, dynamic>{
-      'latLong': listLatLong
+      'polygon': polygon,
+      'heatmap': heatmap
     };
 
     switch (defaultTargetPlatform) {

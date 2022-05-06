@@ -61,7 +61,7 @@ class PlatformViewPluginView: NSObject, FlutterPlatformView {
         // create a retangular path
         let rect = GMSMutablePath()
 
-        let listLatLong = args["latLong"] as! Array<Array<Double>>
+        let listLatLong = args["polygon"] as! Array<Array<Double>>
         for latLong in listLatLong {
             rect.add(CLLocationCoordinate2D(latitude: latLong[0], longitude: latLong[1]))
         }
@@ -79,13 +79,9 @@ class PlatformViewPluginView: NSObject, FlutterPlatformView {
 
     var heatmapLayer = GMUHeatmapTileLayer()
 
-    let object: [[String : Double]] = [
-        ["lat" : -37.1886, "lng" : 145.708 ] ,
-        ["lat" : -37.8361, "lng" : 144.845 ],
-        ["lat" : -38.4034, "lng" : 144.192 ],
-        ["lat" : -38.7597, "lng" : 143.67 ] ,
-        ["lat" : -36.9672, "lng" : 141.083 ]
-    ]
+    var object: [[String : Double]] =  args["heatmap"] as! [[String: Double]]
+
+    heatmapLayer.radius = 50
 
     var list = [GMUWeightedLatLng]()
     for item in object {
@@ -93,7 +89,7 @@ class PlatformViewPluginView: NSObject, FlutterPlatformView {
       let lng = item["lng"] as! CLLocationDegrees
       let coords = GMUWeightedLatLng(
         coordinate: CLLocationCoordinate2DMake(lat, lng),
-        intensity: 1.0
+        intensity: 20.0
       )
       list.append(coords)
     }
