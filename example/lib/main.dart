@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import 'package:platform_view/platform_view.dart';
+import 'package:platform_view_example/data.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,27 +22,25 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  final List<List<double>> polygon = [
-    [-37.1886, 145.708],
-    [-37.8361, 144.845],
-    [-38.4034, 144.192],
-    [-38.7597, 143.67],
-    [-36.9672, 141.083],
-    [-37.1886, 145.708],
-  ];
-
-  List<Map<String, double>> object = createHeatmapObject();
+  final List<List<double>> polygon = LatLongData.polygon;
+  final List<double> centroid = LatLongData.centroid;
 
   @override
   Widget build(BuildContext context) {
+    List<Map<String, double>> object = createHeatmapObject(polygon, centroid);
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
         body: PlatformView(
+          zoom: 13,
           polygon: polygon,
           heatmap: object,
+          centroid: centroid,
+          myLocationEnabled: false,
+          myLocationButtonEnabled: false,
+          zoomControlEnabled: false,
         ),
         // Center(
         //   child: Text('Running on: $_platformVersion\n'),
@@ -49,31 +50,16 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-List<Map<String, double>> createHeatmapObject() {
+List<Map<String, double>> createHeatmapObject(
+    List<List<double>> polygon, List<double> centroid) {
+  var random = Random();
   List<Map<String, double>> object = [];
-  for (var i = 0; i <= 1000; i++) {
-    var doubleI = i.toDouble();
-    object.add(
-        {"lat": -37.7708 + doubleI / 1000, "lng": 144.957 + doubleI / 1000});
+  for (var i = 0; i < polygon.length; i++) {
+    // var randomIntensity = random.nextInt(10).toDouble();
+    object.add({"lat": polygon[i][1], "lng": polygon[i][0], "intensity": 1});
   }
-  for (var i = 0; i <= 1000; i++) {
-    var doubleI = i.toDouble();
+  object.add({"lat": centroid[1], "lng": centroid[0], "intensity": 1});
 
-    object.add(
-        {"lat": -37.7708 - doubleI / 1000, "lng": 144.957 - doubleI / 1000});
-  }
-  for (var i = 0; i <= 1000; i++) {
-    var doubleI = i.toDouble();
-
-    object.add(
-        {"lat": -37.7708 + doubleI / 1000, "lng": 144.957 - doubleI / 1000});
-  }
-  for (var i = 0; i <= 1000; i++) {
-    var doubleI = i.toDouble();
-
-    object.add(
-        {"lat": -37.7708 - doubleI / 1000, "lng": 144.957 + doubleI / 1000});
-  }
-
+  print(object);
   return object;
 }

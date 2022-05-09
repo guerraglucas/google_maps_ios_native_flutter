@@ -34,25 +34,27 @@ class PlatformViewPluginView: NSObject, FlutterPlatformView {
     }
 
     func getOtSetupMapsView() -> GMSMapView {
+        let centroid = args["centroid"] as! Array<Double>
+        let camLat = centroid[0] as! Double
+        let camLng = centroid[1] as! Double
+        let zoom = args["zoom"] as! Float
         if let mapView = mapView {
             return mapView
         }
-        let camera = GMSCameraPosition.camera(withLatitude: -37.1886, longitude: 145.708, zoom: 10)
+        let camera = GMSCameraPosition.camera(withLatitude: camLng, longitude: camLat, zoom: zoom)
         let mapView = GMSMapView.map(withFrame: frame, camera: camera)
         self.mapView = mapView
         mapView.mapType = .satellite
         let polygon = createPolygons()
         polygon.map = mapView
-        let heatmap = addHeatmap()
-        heatmap.map = mapView
 
-        // mapView.rootViewController = UIApplication.shared.keyWindow?.rootViewController
-        // self.mapView.delegate = self
-        // let marker = GMSMarker()
-        // marker.position = CLLocationCoordinate2D(latitude: -33.86, longitude: 151.20)
-        // marker.title = "Sydney"
-        // marker.snippet = "Australia"
-        // marker.map = mapView
+        if args.keys.contains { $0 == "heatmap"} {
+
+            let heatmap = addHeatmap()
+            heatmap.map = mapView
+        }
+
+
         return mapView
     }
 
@@ -63,13 +65,15 @@ class PlatformViewPluginView: NSObject, FlutterPlatformView {
 
         let listLatLong = args["polygon"] as! Array<Array<Double>>
         for latLong in listLatLong {
-            rect.add(CLLocationCoordinate2D(latitude: latLong[0], longitude: latLong[1]))
+            rect.add(CLLocationCoordinate2D(latitude: latLong[1], longitude: latLong[0]))
         }
 
         //create the polygon, and assign it to the map
 
         let polygon = GMSPolygon(path: rect)
+
         polygon.fillColor = UIColor(red: 1, green: 0, blue: 0, alpha: 0.5)
+
         polygon.strokeColor = .black
         polygon.strokeWidth = 2
         return polygon
@@ -79,24 +83,35 @@ class PlatformViewPluginView: NSObject, FlutterPlatformView {
 
     var heatmapLayer = GMUHeatmapTileLayer()
 
-    var object: [[String : Double]] =  args["heatmap"] as! [[String: Double]]
+    var object: [[String : Any]] =  args["heatmap"] as! [[String: Any]]
 
-    heatmapLayer.radius = 50
+    heatmapLayer.radius = 200
 
     var list = [GMUWeightedLatLng]()
     for item in object {
       let lat = item["lat"] as! CLLocationDegrees
       let lng = item["lng"] as! CLLocationDegrees
+      let intensity = item["intensity"] as! Float
       let coords = GMUWeightedLatLng(
         coordinate: CLLocationCoordinate2DMake(lat, lng),
-        intensity: 20.0
+        intensity: intensity
       )
       list.append(coords)
     }
+    let gradientColors: [UIColor] = [.green, .red]
+    let gradientStartPoints: [NSNumber] = [0.1, 1.0]
+    heatmapLayer.gradient = GMUGradient(
+        colors: gradientColors,
+        startPoints: gradientStartPoints,
+        colorMapSize: 12
+    )
 
     // Add the latlngs to the heatmap layer.
     heatmapLayer.weightedData = list
+    heatmapLayer.opacity = 0.8
 
     return heatmapLayer
 }
+
+
 }
