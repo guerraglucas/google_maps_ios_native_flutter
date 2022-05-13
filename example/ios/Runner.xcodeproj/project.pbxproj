@@ -52,8 +52,6 @@
 		A037DFB2281C4F3D006E3EC3 /* Secrets.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Secrets.plist; sourceTree = "<group>"; };
 		A0CEFCC3281A015600BA2384 /* Info-Debug.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-Debug.plist"; sourceTree = "<group>"; };
 		A0CEFCC4281A015600BA2384 /* Info-Release.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-Release.plist"; sourceTree = "<group>"; };
-		A0CEFCDD281A040E00BA2384 /* Runner copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Runner copy-Info.plist"; path = "/Users/lucas/platform_view/example/ios/Runner copy-Info.plist"; sourceTree = "<absolute>"; };
-		A0CEFCDE281A040E00BA2384 /* Runner copy2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Runner copy2-Info.plist"; path = "/Users/lucas/platform_view/example/ios/Runner copy2-Info.plist"; sourceTree = "<absolute>"; };
 		FE9B1DCC1A4E2AD673372412 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -96,8 +94,6 @@
 				97C146EF1CF9000F007C117D /* Products */,
 				EB1C9C940C819F08421BE7B2 /* Pods */,
 				47DD7CD22CE32E8DD6005C79 /* Frameworks */,
-				A0CEFCDD281A040E00BA2384 /* Runner copy-Info.plist */,
-				A0CEFCDE281A040E00BA2384 /* Runner copy2-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};

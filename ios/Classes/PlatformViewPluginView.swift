@@ -51,7 +51,10 @@ class PlatformViewPluginView: NSObject, FlutterPlatformView {
         if args.keys.contains { $0 == "heatmap"} {
 
             let heatmap = addHeatmap()
-            heatmap.map = mapView
+            for heatmapLayer in heatmap {
+            heatmapLayer.map = mapView
+
+            }
         }
 
 
@@ -79,16 +82,25 @@ class PlatformViewPluginView: NSObject, FlutterPlatformView {
         return polygon
     }
 
-    func addHeatmap() -> GMUHeatmapTileLayer {
+    func addHeatmap() -> [GMUHeatmapTileLayer] {
 
+
+
+
+    var object: [[[String : Any]]] =  args["heatmap"] as! [[[String: Any]]]
+    var heatmapLayerList = [GMUHeatmapTileLayer()]
+
+    for list in object {
     var heatmapLayer = GMUHeatmapTileLayer()
 
-    var object: [[String : Any]] =  args["heatmap"] as! [[String: Any]]
+    heatmapLayer.radius = 10
+    heatmapLayer.maximumZoomIntensity = 1000
+    heatmapLayer.minimumZoomIntensity = 1
 
-    heatmapLayer.radius = 200
 
-    var list = [GMUWeightedLatLng]()
-    for item in object {
+
+    var coordList = [GMUWeightedLatLng]()
+    for item in list {
       let lat = item["lat"] as! CLLocationDegrees
       let lng = item["lng"] as! CLLocationDegrees
       let intensity = item["intensity"] as! Float
@@ -96,21 +108,31 @@ class PlatformViewPluginView: NSObject, FlutterPlatformView {
         coordinate: CLLocationCoordinate2DMake(lat, lng),
         intensity: intensity
       )
-      list.append(coords)
+      coordList.append(coords)
     }
-    let gradientColors: [UIColor] = [.green, .red]
-    let gradientStartPoints: [NSNumber] = [0.1, 1.0]
-    heatmapLayer.gradient = GMUGradient(
-        colors: gradientColors,
-        startPoints: gradientStartPoints,
-        colorMapSize: 12
-    )
+
 
     // Add the latlngs to the heatmap layer.
-    heatmapLayer.weightedData = list
-    heatmapLayer.opacity = 0.8
+    heatmapLayer.weightedData = coordList
+    heatmapLayer.opacity = 0.7
 
-    return heatmapLayer
+    heatmapLayerList.append(heatmapLayer)
+    }
+
+
+    let gradientColors: [UIColor] = [.green, .red, .blue, .yellow, .purple, .orange, .gray, .white, .black, .brown, .cyan, .magenta]
+    let gradientStartPoints: [NSNumber] = [0.01, 1.0]
+    for (index, heatmap) in heatmapLayerList.enumerated() {
+        heatmap.gradient = GMUGradient(
+        colors: [gradientColors[index], gradientColors[index + 1]],
+        startPoints: gradientStartPoints,
+        colorMapSize: 256
+    )
+
+    }
+
+    return heatmapLayerList
+
 }
 
 

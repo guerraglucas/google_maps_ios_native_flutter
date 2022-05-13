@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 import 'package:platform_view/platform_view.dart';
@@ -27,7 +25,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, double>> object = createHeatmapObject(polygon, centroid);
+    List<List<Map<String, double>>> object =
+        createHeatmapMultipleLayers([-53.9357703024176, -15.0178982321176]);
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -50,16 +49,33 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-List<Map<String, double>> createHeatmapObject(
-    List<List<double>> polygon, List<double> centroid) {
-  var random = Random();
+List<Map<String, double>> createHeatmapObject(List<double> latLng) {
+  double startingLat = latLng[1];
+  double startingLng = latLng[0];
   List<Map<String, double>> object = [];
-  for (var i = 0; i < polygon.length; i++) {
-    // var randomIntensity = random.nextInt(10).toDouble();
-    object.add({"lat": polygon[i][1], "lng": polygon[i][0], "intensity": 1});
+  for (var i = 0; i < 100; i++) {
+    for (var y = 0; y < 100; y++) {
+      object.add({"lat": startingLat, "lng": startingLng, "intensity": 1});
+      startingLat += 0.0005;
+    }
+    startingLng += 0.0005;
+    startingLat = latLng[1];
   }
-  object.add({"lat": centroid[1], "lng": centroid[0], "intensity": 1});
 
-  print(object);
   return object;
+}
+
+List<List<Map<String, double>>> createHeatmapMultipleLayers(
+    List<double> latLng) {
+  List<Map<String, double>> rawList = createHeatmapObject(latLng);
+  List<List<Map<String, double>>> multipleLayers = [];
+  List<Map<String, double>> transitoryList = [];
+  for (var i = 0; i < rawList.length; i++) {
+    transitoryList.add(rawList[i]);
+    if (transitoryList.length == 1000) {
+      multipleLayers.add(transitoryList);
+      transitoryList = [];
+    }
+  }
+  return multipleLayers;
 }

@@ -20,7 +20,7 @@ class PlatformView extends StatelessWidget {
   final List<List<double>>? polygon;
 
   ///receives a list of [lat, lng] to draw heatmap points on the map
-  final List<Map<String, double>>? heatmap;
+  final List<List<Map<String, double>>>? heatmap;
 
   ///receives a lat,lng for center the map camera
   final List<double> centroid;
